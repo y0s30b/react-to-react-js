@@ -1,11 +1,16 @@
 import React from 'react';
-import Wasabi from './Wasabi';
+
+function Food(props) {
+  return <h3>I love {props.fav} 😀</h3>
+}
 
 function App() {
   return (
     <div className="App">
       <h1>Hello React</h1>
-      <Wasabi />
+      <Food fav="Sushi" />
+      <Food fav="Gyukatsu" />
+      <Food fav="Yakiniku" />
     </div>
   );
 }
