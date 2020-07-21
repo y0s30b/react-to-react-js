@@ -1,50 +1,46 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import axios from 'axios';
+import Film from './Film';
 
-// function component 대신 class component 사용
-class App extends React.Component { 
-  constructor(props) {
-    super(props);
-    console.log("hello");
-  }
-
-  // 변하는 data를 위해 state 사용 (state는 object)
+class App extends React.Component {
   state = {
-    count: 0
-  };
-
-  plus = () => {
-    console.log("Plus");
-    //this.setState({count: this.state.count + 1});
-    this.setState(current => ({count: current.count + 1}));
+    isLoading: true,
+    films: []
   }
-  minus = () => {
-    console.log("Minus");
-    //this.setState({count: this.state.count - 1});
-    this.setState(current => ({count: current.count - 1}));
-
+  getFilms = async () => {
+    //const films = await axios.get("https://yts-proxy.now.sh/list_movies.json");
+    const {data: {data: {movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+    //console.log(movies);
+    this.setState({films: movies, isLoading: false});
+    //console.log(this.state.films);
   }
+  async componentDidMount() {
+    // 여기에서 data를 fetch
+    /*setTimeout(() => {
+      this.setState({ isLoading: false })
+    }, 3000);*/
 
-  componentDidMount() {
-    console.log("Component Rendered!");
+    // data를 fetch하는 방법에는, fetch() method도 있지만, axios()를 주로 사용할 예정
+    // yts-proxy.now.sh/list_movie.json
+    
+    this.getFilms();
   }
-
-  componentDidUpdate() {
-    console.log("Component Updated!");
-  }
-
-  componentWillUnmount() {
-    console.log("Bye Bye :)");
-  }
-
-  // return 없이 내부에서 render 메소드 사용
   render() {
-    // 왜 render()랑 constructor()에서의 log가 두 번씩 출력되는 걸까?
-    console.log("Rendering...");
+    const {isLoading, films} = this.state;
     return <div>
-      <h1>My counter ➡ {this.state.count} 🍋</h1>
-      <button onClick={this.plus}>Plus</button>
-      <button onClick={this.minus}>Minus</button>
+      {isLoading? "Loading": films.map(
+        film => {
+          console.log(film);
+          return <Film 
+            key={film.id}
+            id={film.id} 
+            title={film.title} 
+            year={film.year} 
+            rating={film.rating} 
+            summary={film.summary} 
+            coverimg={film.medium_cover_image} />
+        }
+      )}
     </div>
   }
 }
