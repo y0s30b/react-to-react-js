@@ -10,7 +10,7 @@ function Film({/*id,*/ title, year, rating, summary, coverimg, genres}) {
     <div className="film__data">
       <h3 className="film__title">{title}</h3>
       <h5 className="film__year">{year}</h5>
-      <ul className="genres">
+      <ul className="film__genres">
         {genres.map((genre, index) => 
           {return (<li key={index} className="genres__genre">{genre}</li>);})}
       </ul>
